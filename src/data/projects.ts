@@ -59,27 +59,47 @@ export const PROJECTS: Project[] = [
       {
         src: '/projects/cwc-inventory/02-detail-equipement.png',
         alt: "Fiche détaillée d'un équipement avec spécifications techniques",
-        caption: 'Fiche équipement — description, spécifications techniques et statut.',
+        caption: 'Fiche équipement — description, spécifications techniques et statut (ex. ENVY Inspire 7200e).',
       },
       {
-        src: '/projects/cwc-inventory/03-admin-vue-ensemble.png',
-        alt: "Panneau d'administration, vue d'ensemble",
-        caption: 'Panneau d’administration — vue d’ensemble (zones, catégories, fabricants).',
-      },
-      {
-        src: '/projects/cwc-inventory/04-gestion-zones.png',
-        alt: 'Écran de gestion des zones CWC',
-        caption: 'Gestion des zones — création, édition (nom + couleur) et suppression.',
-      },
-      {
-        src: '/projects/cwc-inventory/05-gestion-categories.png',
-        alt: 'Gestion des catégories produits en arborescence',
-        caption: 'Gestion des catégories — arborescence produits (HP Solutions, Personal Systems…).',
-      },
-      {
-        src: '/projects/cwc-inventory/06-ajout-equipement.png',
+        src: '/projects/cwc-inventory/03-ajout-equipement.png',
         alt: "Formulaire d'ajout d'un équipement",
-        caption: 'Ajout d’un équipement — image, catégorie, zone, statut et spécifications.',
+        caption: 'Ajout d’un équipement — image, catégorie, zone, statut et spécifications techniques.',
+      },
+      {
+        src: '/projects/cwc-inventory/04-admin-vue-ensemble.png',
+        alt: "Panneau d'administration, vue d'ensemble",
+        caption: 'Panneau d’administration — vue d’ensemble (23 zones, 15 catégories, 5 fabricants).',
+      },
+      {
+        src: '/projects/cwc-inventory/05-gestion-zones.png',
+        alt: 'Écran de gestion des zones CWC',
+        caption: 'Gestion des zones — liste complète avec édition et suppression.',
+      },
+      {
+        src: '/projects/cwc-inventory/06-edition-zone.png',
+        alt: "Fenêtre d'édition d'une zone (nom et couleur)",
+        caption: 'Édition d’une zone — nom et couleur personnalisables.',
+      },
+      {
+        src: '/projects/cwc-inventory/07-gestion-categories.png',
+        alt: 'Gestion des catégories produits en arborescence',
+        caption: 'Gestion des catégories — arborescence produits (HP Solutions, Personal Systems, Print…).',
+      },
+      {
+        src: '/projects/cwc-inventory/08-gestion-fabricants.png',
+        alt: 'Gestion des fabricants',
+        caption: 'Gestion des fabricants — HP, HP HYPERX, HP OMEN, POLY…',
+      },
+      {
+        src: '/projects/cwc-inventory/09-gestion-utilisateurs.png',
+        alt: 'Gestion des utilisateurs et des rôles',
+        caption: 'Gestion des utilisateurs — création, rôles (admin / utilisateur) et statut.',
+      },
+      {
+        src: '/projects/cwc-inventory/10-configuration.png',
+        alt: "Configuration bilingue de l'application",
+        caption: 'Configuration — libellés de l’application en français et anglais.',
       },
     ],
   },

@@ -107,68 +107,14 @@
 }
 
 /* ------------------------------------------------------------------ */
-/*  Animation des ballons (section Sport)                             */
-/*  Volley : service en arc de la gauche vers la droite.              */
-/*  Basket : dribble (rebonds) de la droite vers la gauche.           */
+/*  Section Sport — les ballons (animés au scroll via GSAP).          */
 /* ------------------------------------------------------------------ */
-.ball {
+.sport-ball {
   position: absolute;
-  width: 44px;
-  height: 44px;
-  will-change: transform, left, top;
-}
-
-/* Volley — déplacement horizontal linéaire… */
-@keyframes volley-x {
-  from { left: -12%; }
-  to   { left: 108%; }
-}
-/* …+ arc vertical (service). */
-@keyframes volley-y {
-  0%   { top: 58%; }
-  50%  { top: 6%; }
-  100% { top: 58%; }
-}
-@keyframes ball-spin {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
-}
-.ball--volley {
-  animation:
-    volley-x 7s linear infinite,
-    volley-y 7s ease-in-out infinite;
-}
-.ball--volley > svg {
-  animation: ball-spin 2.2s linear infinite;
-}
-
-/* Basket — déplacement horizontal (droite → gauche)… */
-@keyframes basket-x {
-  from { left: 108%; }
-  to   { left: -12%; }
-}
-/* …+ rebonds rapides au sol (dribble). */
-@keyframes basket-y {
-  0%   { top: 12%; }
-  50%  { top: 66%; }
-  100% { top: 12%; }
-}
-.ball--basket {
-  animation:
-    basket-x 6s linear infinite,
-    basket-y 0.8s cubic-bezier(0.3, 0, 0.5, 1) infinite;
-}
-.ball--basket > svg {
-  animation: ball-spin 1.4s linear infinite reverse;
-}
-
-/* Respect de prefers-reduced-motion : on fige les ballons. */
-@media (prefers-reduced-motion: reduce) {
-  .ball--volley,
-  .ball--basket,
-  .ball > svg {
-    animation: none !important;
-  }
-  .ball--volley { left: 20%; top: 30%; }
-  .ball--basket { left: 70%; top: 40%; }
+  top: 50%;
+  width: 60px;
+  height: 60px;
+  margin-top: -30px;
+  will-change: transform;
+  filter: drop-shadow(0 8px 10px rgba(10, 10, 10, 0.22));
 }

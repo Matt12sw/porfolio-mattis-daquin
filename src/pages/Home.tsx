@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import PageTransition from '../components/ui/PageTransition';
 import HeroCanvas from '../components/three/HeroCanvas';
 import Reveal from '../components/ui/Reveal';
+import InteractiveTitle from '../components/ui/InteractiveTitle';
 import SectionHeading from '../components/ui/SectionHeading';
 import { CONTACT } from '../data/socials';
 import { SKILL_GROUPS } from '../data/skills';
@@ -28,10 +29,9 @@ export default function Home() {
               <span className="text-signal">●</span> Développeur Full-Stack · EFREI Paris
             </motion.p>
 
-            <h1 className="text-display-xl">
-              <span className="block">Code</span>
-              <span className="block text-signal">/ Craft</span>
-            </h1>
+            <InteractiveTitle
+              lines={[{ text: 'CODE' }, { text: '/ CRAFT', accent: true }]}
+            />
 
             <p className="mt-6 max-w-md text-lg text-smoke">
               Mattis Daquin — je conçois des applications web performantes et

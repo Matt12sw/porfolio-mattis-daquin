@@ -1,38 +1,98 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import SectionHeading from '../ui/SectionHeading';
-import Reveal from '../ui/Reveal';
 import { SPORTS, type Sport } from '../../data/sports';
+import { usePrefersReducedMotion } from '../../hooks/usePrefersReducedMotion';
+
+gsap.registerPlugin(ScrollTrigger);
 
 /**
  * Section « Centres d'intérêt — Sport ».
- * Un bandeau animé (ballon de volley en service + ballon de basket en dribble)
- * puis 3 cartes : une par sport, avec photo, logo du club, club, lieu et durée.
+ * Au scroll, un ballon de basket (dribble) et un ballon de volley (service)
+ * balaient la rangée et « révèlent » les 3 cartes de sport (essuyage clip-path).
  */
 export default function SportsSection() {
+  const rootRef = useRef<HTMLDivElement>(null);
+  const basketRef = useRef<HTMLDivElement>(null);
+  const volleyRef = useRef<HTMLDivElement>(null);
+  const reduced = usePrefersReducedMotion();
+
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root) return;
+
+    const cards = gsap.utils.toArray<HTMLElement>('.sport-card', root);
+
+    if (reduced) {
+      // Pas d'animation : tout est visible d'emblée.
+      gsap.set(cards, { clipPath: 'inset(0 0 0 0)', opacity: 1 });
+      gsap.set([basketRef.current, volleyRef.current], { autoAlpha: 0 });
+      return;
+    }
+
+    const ctx = gsap.context(() => {
+      gsap.set(cards, { clipPath: 'inset(0 100% 0 0)', opacity: 0 });
+      gsap.set(basketRef.current, { left: '-12%', autoAlpha: 1 });
+      gsap.set(volleyRef.current, { left: '108%', autoAlpha: 1 });
+
+      const tl = gsap.timeline({
+        scrollTrigger: { trigger: root, start: 'top 72%', once: true },
+      });
+
+      // Le basket dribble de gauche à droite en tournant…
+      tl.to(basketRef.current, {
+        left: '108%',
+        rotation: 1440,
+        duration: 1.7,
+        ease: 'power1.inOut',
+      })
+        // …et découvre les cartes au passage (essuyage gauche → droite).
+        .to(
+          cards,
+          {
+            clipPath: 'inset(0 0% 0 0)',
+            opacity: 1,
+            duration: 0.6,
+            stagger: 0.32,
+            ease: 'power2.out',
+          },
+          0.35
+        )
+        // Le volley repart en sens inverse (service).
+        .to(
+          volleyRef.current,
+          { left: '-12%', rotation: -1080, duration: 1.5, ease: 'power1.inOut' },
+          0.5
+        )
+        .to([basketRef.current, volleyRef.current], { autoAlpha: 0, duration: 0.3 }, '>-0.2');
+    }, root);
+
+    return () => ctx.revert();
+  }, [reduced]);
+
   return (
-    <div className="mt-24">
+    <div ref={rootRef} className="mt-24">
       <SectionHeading eyebrow="Centres d'intérêt" title="Le sport, mon autre terrain" className="mb-8" />
 
-      {/* Bandeau animé : ballons qui traversent l'écran. */}
-      <div
-        className="relative mb-10 h-28 overflow-hidden border-y border-line bg-grid sm:h-32"
-        aria-hidden="true"
-      >
-        <div className="ball ball--volley">
-          <VolleyBall />
-        </div>
-        <div className="ball ball--basket">
+      {/* Piste de révélation : les ballons balaient au-dessus des cartes. */}
+      <div className="relative">
+        {/* Ballons (au-dessus, animés au scroll) */}
+        <div ref={basketRef} className="sport-ball z-10" aria-hidden="true">
           <BasketBall />
         </div>
-      </div>
+        <div ref={volleyRef} className="sport-ball z-10" aria-hidden="true">
+          <VolleyBall />
+        </div>
 
-      {/* 3 cartes sport */}
-      <div className="grid gap-6 md:grid-cols-3">
-        {SPORTS.map((sport, i) => (
-          <Reveal key={sport.id} delay={i * 0.08}>
-            <SportCard sport={sport} />
-          </Reveal>
-        ))}
+        {/* 3 cartes sport */}
+        <div className="grid gap-6 md:grid-cols-3">
+          {SPORTS.map((sport) => (
+            <div key={sport.id} className="sport-card">
+              <SportCard sport={sport} />
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
@@ -41,12 +101,9 @@ export default function SportsSection() {
 function SportCard({ sport }: { sport: Sport }) {
   return (
     <article className="group flex h-full flex-col border border-line transition-colors duration-300 hover:border-signal">
-      {/* Photo */}
       <SportPhoto sport={sport} />
-
       <div className="flex flex-1 flex-col p-5">
         <div className="flex items-center gap-3">
-          {/* Logo du club */}
           <SportLogo sport={sport} />
           <div>
             <h3 className="font-display text-xl leading-none">{sport.discipline}</h3>
@@ -115,33 +172,51 @@ function SportLogo({ sport }: { sport: Sport }) {
   );
 }
 
-/* --------------------------- Ballons (SVG) --------------------------- */
+/* --------------------- Ballons réalistes (SVG) --------------------- */
 
-function VolleyBall() {
+function BasketBall() {
   return (
-    <svg viewBox="0 0 48 48" width="44" height="44" role="img" aria-label="ballon de volley">
-      <circle cx="24" cy="24" r="22" fill="#fff" stroke="#0A0A0A" strokeWidth="1.5" />
-      <g fill="none" stroke="#0A0A0A" strokeWidth="1.5">
-        <path d="M24 2c-6 8-7 20-3 44" />
-        <path d="M24 2c6 8 7 20 3 44" />
-        <path d="M2 24c10-3 22-3 44 0" />
-        <path d="M6 10c8 6 22 8 36 4" />
-        <path d="M6 38c8-6 22-8 36-4" />
+    <svg viewBox="0 0 64 64" width="60" height="60" role="img" aria-label="ballon de basket">
+      <defs>
+        <radialGradient id="bball" cx="38%" cy="30%" r="78%">
+          <stop offset="0%" stopColor="#F6A860" />
+          <stop offset="55%" stopColor="#E1772A" />
+          <stop offset="100%" stopColor="#A94D18" />
+        </radialGradient>
+      </defs>
+      <circle cx="32" cy="32" r="30" fill="url(#bball)" />
+      <g fill="none" stroke="#2A1608" strokeWidth="2" strokeLinecap="round">
+        <line x1="32" y1="2" x2="32" y2="62" />
+        <line x1="2" y1="32" x2="62" y2="32" />
+        <path d="M10 9c9 8 13 30 6 46" />
+        <path d="M54 9c-9 8-13 30-6 46" />
       </g>
+      {/* Reflet */}
+      <ellipse cx="23" cy="20" rx="10" ry="6" fill="#fff" opacity="0.18" />
     </svg>
   );
 }
 
-function BasketBall() {
+function VolleyBall() {
   return (
-    <svg viewBox="0 0 48 48" width="44" height="44" role="img" aria-label="ballon de basket">
-      <circle cx="24" cy="24" r="22" fill="#E8813A" stroke="#0A0A0A" strokeWidth="1.5" />
-      <g fill="none" stroke="#0A0A0A" strokeWidth="1.5">
-        <line x1="24" y1="2" x2="24" y2="46" />
-        <line x1="2" y1="24" x2="46" y2="24" />
-        <path d="M7 8c8 6 12 22 6 34" />
-        <path d="M41 8c-8 6-12 22-6 34" />
+    <svg viewBox="0 0 64 64" width="60" height="60" role="img" aria-label="ballon de volley">
+      <defs>
+        <radialGradient id="vball" cx="38%" cy="30%" r="80%">
+          <stop offset="0%" stopColor="#ffffff" />
+          <stop offset="70%" stopColor="#EEF1F5" />
+          <stop offset="100%" stopColor="#C6CCD5" />
+        </radialGradient>
+      </defs>
+      <circle cx="32" cy="32" r="30" fill="url(#vball)" stroke="#C6CCD5" strokeWidth="1" />
+      <g fill="none" stroke="#8A94A2" strokeWidth="1.8" strokeLinecap="round">
+        <path d="M32 2c-7 10-8 26-4 60" />
+        <path d="M32 2c7 10 8 26 4 60" />
+        <path d="M4 26c11 5 25 6 43 1" />
+        <path d="M6 44c9-6 22-7 34-4" />
+        <path d="M2 32c9-3 15-11 20-27" />
+        <path d="M62 32c-9-3-15-11-20-27" />
       </g>
+      <ellipse cx="23" cy="19" rx="9" ry="5" fill="#fff" opacity="0.5" />
     </svg>
   );
 }

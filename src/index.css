@@ -1,0 +1,107 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ------------------------------------------------------------------ */
+/*  Base                                                               */
+/* ------------------------------------------------------------------ */
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    @apply bg-paper text-ink font-sans antialiased;
+    overflow-x: hidden;
+  }
+
+  /* Focus clavier visible et cohérent partout (accessibilité). */
+  :focus-visible {
+    outline: 2px solid theme('colors.signal');
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  /* Titres display en capitales. */
+  h1,
+  h2,
+  h3 {
+    @apply font-display uppercase;
+  }
+
+  ::selection {
+    background: theme('colors.signal');
+    color: #fff;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/*  Composants réutilisables                                          */
+/* ------------------------------------------------------------------ */
+@layer components {
+  /* Label technique monospace (skills, légendes, indicateurs). */
+  .tech-label {
+    @apply font-mono text-xs uppercase tracking-[0.2em] text-smoke;
+  }
+
+  /* Bouton principal (rempli, encre → rouge au survol). */
+  .btn {
+    @apply inline-flex items-center gap-2 font-mono text-sm uppercase tracking-widest
+           px-6 py-3 border transition-colors duration-300 ease-signal;
+  }
+  .btn-primary {
+    @apply btn bg-ink text-paper border-ink hover:bg-signal hover:border-signal;
+  }
+  .btn-ghost {
+    @apply btn bg-transparent text-ink border-ink hover:bg-ink hover:text-paper;
+  }
+
+  /* Conteneur de page. */
+  .container-page {
+    @apply mx-auto w-full max-w-content px-5 sm:px-8;
+  }
+
+  /* Liseré rouge animé sous les liens de navigation. */
+  .link-underline {
+    @apply relative;
+  }
+  .link-underline::after {
+    content: '';
+    @apply absolute left-0 -bottom-1 h-[2px] w-full origin-left scale-x-0
+           bg-signal transition-transform duration-300 ease-signal;
+  }
+  .link-underline:hover::after,
+  .link-underline[data-active='true']::after {
+    @apply scale-x-100;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/*  Accessibilité — prefers-reduced-motion                            */
+/* ------------------------------------------------------------------ */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* Grille de fond « papier millimétré » discrète (utilitaire). */
+.bg-grid {
+  background-image:
+    linear-gradient(to right, theme('colors.line') 1px, transparent 1px),
+    linear-gradient(to bottom, theme('colors.line') 1px, transparent 1px);
+  background-size: 48px 48px;
+}

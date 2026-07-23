@@ -4,7 +4,7 @@ import SectionHeading from '../components/ui/SectionHeading';
 import Reveal from '../components/ui/Reveal';
 import { TIMELINE, KIND_LABEL, CAREER_GOAL, type TimelineItem, type TimelineKind } from '../data/experience';
 
-// Couleur de la pastille de type (petit repère sous le logo).
+// Couleur de la pastille de type (petit repère à côté de la période).
 const kindDot: Record<TimelineKind, string> = {
   formation: 'bg-ink',
   mission: 'bg-signal',
@@ -41,8 +41,8 @@ export default function Experience() {
           ))}
         </div>
 
-        {/* Liste des expériences — style « CV » : logo à gauche, contenu à droite. */}
-        <ol className="space-y-10">
+        {/* Liste des expériences — style « LinkedIn » : logo à gauche, contenu à droite. */}
+        <ol className="space-y-12">
           {items.map((item, i) => (
             <Reveal as="li" key={item.id} delay={i * 0.04}>
               <div className="flex gap-4 sm:gap-6">
@@ -66,12 +66,13 @@ export default function Experience() {
                     </span>
                   </div>
 
+                  {/* LOGO — NOM DU POSTE */}
                   <h2 className="mt-2 font-display text-2xl leading-tight">{item.title}</h2>
                   <p className="mt-0.5 text-sm font-semibold text-ink/70">{item.org}</p>
-                  <p className="mt-3 max-w-2xl leading-relaxed text-ink/80">{item.description}</p>
 
+                  {/* LES ENTITÉS UTILISÉES (badges) */}
                   {item.tags && (
-                    <ul className="mt-4 flex flex-wrap gap-2">
+                    <ul className="mt-3 flex flex-wrap gap-2">
                       {item.tags.map((t) => (
                         <li
                           key={t}
@@ -81,6 +82,18 @@ export default function Experience() {
                         </li>
                       ))}
                     </ul>
+                  )}
+
+                  {/* DESCRIPTIF (sans technologies) */}
+                  <p className="mt-3 max-w-2xl leading-relaxed text-ink/80">{item.description}</p>
+
+                  {/* 3 PHOTOS de l'expérience */}
+                  {item.photos && item.photos.length > 0 && (
+                    <div className="mt-5 grid grid-cols-3 gap-2 sm:max-w-xl">
+                      {item.photos.map((src) => (
+                        <ExperiencePhoto key={src} src={src} org={item.org} />
+                      ))}
+                    </div>
                   )}
                 </div>
               </div>
@@ -93,14 +106,15 @@ export default function Experience() {
 }
 
 /**
- * Logo d'une expérience : affiche le SVG si `logo` est fourni (avec repli
- * monogramme si le fichier est absent), sinon un monogramme directement.
+ * Logo d'une expérience : affiche l'image (object-contain pour respecter les
+ * logos de marque), sinon un monogramme si le fichier est absent.
  */
 function ExperienceLogo({ item }: { item: TimelineItem }) {
   const [failed, setFailed] = useState(false);
   const monogram = item.logoText ?? item.org.slice(0, 2).toUpperCase();
 
-  const box = 'grid h-14 w-14 place-items-center overflow-hidden border border-line bg-paper sm:h-16 sm:w-16';
+  const box =
+    'grid h-14 w-14 place-items-center overflow-hidden border border-line bg-white sm:h-16 sm:w-16';
 
   if (item.logo && !failed) {
     return (
@@ -108,7 +122,7 @@ function ExperienceLogo({ item }: { item: TimelineItem }) {
         <img
           src={item.logo}
           alt={`Logo ${item.org}`}
-          className="h-full w-full object-cover"
+          className="h-full w-full object-contain p-1.5"
           onError={() => setFailed(true)}
         />
       </div>
@@ -119,5 +133,28 @@ function ExperienceLogo({ item }: { item: TimelineItem }) {
     <div className={`${box} font-display text-xl text-ink`} aria-label={item.org}>
       {monogram}
     </div>
+  );
+}
+
+/** Vignette photo d'expérience, avec repli propre si le fichier est absent. */
+function ExperiencePhoto({ src, org }: { src: string; org: string }) {
+  const [failed, setFailed] = useState(false);
+
+  if (failed) {
+    return (
+      <div className="bg-grid grid aspect-square place-items-center border border-line bg-paper">
+        <span className="font-mono text-[9px] text-smoke/60">photo</span>
+      </div>
+    );
+  }
+
+  return (
+    <img
+      src={src}
+      alt={`${org} — photo`}
+      loading="lazy"
+      onError={() => setFailed(true)}
+      className="aspect-square w-full border border-line object-cover"
+    />
   );
 }

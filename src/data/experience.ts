@@ -1,4 +1,4 @@
-/** Timeline chronologique : formations, missions, parutions (source : CV). */
+/** Timeline chronologique : formations, missions, parutions (source : CV + LinkedIn). */
 
 export type TimelineKind = 'formation' | 'mission' | 'parution';
 
@@ -8,14 +8,23 @@ export type TimelineItem = {
   /** Utilisé pour trier — année de début. */
   sortKey: number;
   kind: TimelineKind;
+  /** Intitulé du poste (façon LinkedIn). */
   title: string;
+  /** Entité / entreprise + contexte (ex. « Orange · Stage »). */
   org: string;
+  /** Descriptif — SANS lister les technologies (elles vont dans `tags`). */
   description: string;
+  /** Entités / technologies utilisées (badges). */
   tags?: string[];
   /** Chemin d'un logo (public/logos/…). Sinon, on affiche un monogramme. */
   logo?: string;
   /** Monogramme de repli si pas de logo (2-3 lettres). */
   logoText?: string;
+  /**
+   * Jusqu'à 3 photos illustrant l'expérience (déposées dans
+   * public/experiences/<id>/). Repli propre si le fichier est absent.
+   */
+  photos?: string[];
 };
 
 export const KIND_LABEL: Record<TimelineKind, string> = {
@@ -30,60 +39,85 @@ export const TIMELINE: TimelineItem[] = [
     period: '2026 · 2 mois',
     sortKey: 2026.5,
     kind: 'mission',
-    title: 'Stage Développeur — Suivi d’incidents',
-    org: 'Orange',
-    logo: '/logos/orange.svg',
+    title: 'Ingénieur Logiciels Junior',
+    org: 'Orange · Stage',
+    logo: '/logos/orange.jpg',
     description:
-      "Développement d'une application web interne de gestion et de suivi des incidents techniques clients, pour les équipes de support et les techniciens. Mise en œuvre de N8N pour l'automatisation de processus et l'intégration de services.",
+      "Participation au développement d'une application web interne de gestion et de suivi des incidents techniques clients, destinée aux équipes de support et aux techniciens. Automatisation de processus et intégration de services.",
     tags: ['N8N', 'Perl', 'JavaScript', 'Putty CAC'],
+    photos: [
+      '/experiences/orange-2026/01.jpg',
+      '/experiences/orange-2026/02.jpg',
+      '/experiences/orange-2026/03.jpg',
+    ],
   },
   {
     id: 'ilac-2026',
     period: 'Avr. – Juin 2026',
     sortKey: 2026.3,
     kind: 'formation',
-    title: 'Échange académique — ILAC',
-    org: 'Toronto, Canada',
-    logo: '/logos/canada.svg',
+    title: 'Échange académique — Toronto (ILAC)',
+    org: 'ILAC International College · Alternance',
+    logo: '/logos/canada.png',
     description:
-      "Immersion dans un environnement anglophone à Toronto pour renforcer mon anglais, mon autonomie et ma communication dans un contexte international.",
+      "Immersion dans un environnement international anglophone à Toronto pour renforcer mon anglais. Développement de mon autonomie, de ma capacité d'adaptation et de ma communication dans un contexte multiculturel.",
     tags: ['Anglais', 'International'],
+    photos: [
+      '/experiences/ilac-2026/01.jpg',
+      '/experiences/ilac-2026/02.jpg',
+      '/experiences/ilac-2026/03.jpg',
+    ],
   },
   {
     id: 'hp-2025',
     period: '2025 · 2 mois',
     sortKey: 2025.5,
     kind: 'mission',
-    title: 'Stage Développeur — CWC Inventory',
-    org: 'HP France · Paris',
-    logo: '/logos/hp.svg',
+    title: 'Développeur Web — Site d’inventaire CWC',
+    org: 'HP France · Stage · Paris',
+    logo: '/logos/hp.png',
     description:
-      "Développement d'une application web d'inventaire pour le suivi des équipements : base de données produits (CRUD), import/export CSV et suivi du renouvellement du parc.",
+      "Développement d'une application web d'inventaire utilisée en interne pour le suivi des équipements : gestion des produits (ajout, modification, suppression), import / export de données et suivi du renouvellement du parc. Contribution à l'identification des produits défectueux.",
     tags: ['HTML', 'PHP', 'JavaScript', 'SQL'],
+    photos: [
+      '/experiences/hp-2025/01.jpg',
+      '/experiences/hp-2025/02.jpg',
+      '/experiences/hp-2025/03.jpg',
+    ],
   },
   {
     id: 'jo-2024',
-    period: '2024',
+    period: 'Juil. – Août 2024',
     sortKey: 2024.4,
     kind: 'mission',
-    title: 'Bénévole FIVB — Paris 2024',
-    org: 'Jeux Olympiques',
-    logo: '/logos/paris2024.svg',
+    title: 'Bénévole — Jeux Olympiques Paris 2024',
+    org: 'Fédération Internationale de Volleyball (FIVB)',
+    logo: '/logos/paris2024.webp',
     description:
-      "Bénévole durant les JO Paris 2024 sous la coordination de la FIVB : animation d'ateliers volley et beach-volley, accueil d'un public national et international (Champ-de-Mars, Versailles).",
+      "Bénévole durant les JO Paris 2024 sous la coordination de la FIVB (Champ-de-Mars, Tour Eiffel, Versailles). Animation d'ateliers volley et beach-volley, encadrement d'activités interactives et accueil d'un public national et international.",
     tags: ['Événementiel', 'Volley'],
+    photos: [
+      '/experiences/jo-2024/01.jpg',
+      '/experiences/jo-2024/02.jpg',
+      '/experiences/jo-2024/03.jpg',
+    ],
   },
   {
     id: 'efrei-2023',
-    period: '2023 – 2027',
+    period: '2023 – 2028',
     sortKey: 2023.5,
     kind: 'formation',
     title: 'Bachelor Ingénierie du numérique',
-    org: 'EFREI Paris',
-    logo: '/logos/efrei.svg',
+    org: 'EFREI Paris · Grande école du numérique',
+    logo: '/logos/efrei.webp',
     description:
-      "Formation d'ingénierie du numérique. Projets académiques : jeu multijoueur (Node.js / REST API / JSON), site vitrine SmartBike (HTML/CSS responsive), plateforme de streaming Streamflix (PHP, Java).",
+      "Formation d'ingénierie du numérique. Projets académiques variés en développement web et logiciel, menés en solo comme en équipe : jeu multijoueur en ligne, site vitrine et plateforme de streaming.",
     tags: ['Node.js', 'REST API', 'PHP', 'Java', 'HTML/CSS'],
+    photos: [
+      '/experiences/efrei-2023/01.jpg',
+      '/experiences/efrei-2023/02.jpg',
+      '/experiences/efrei-2023/03.jpg',
+    ],
   },
   {
     id: 'exhibition-2025',
@@ -91,7 +125,7 @@ export const TIMELINE: TimelineItem[] = [
     sortKey: 2025.2,
     kind: 'parution',
     title: 'Portrait éditorial — Room Issue',
-    org: 'Exhibition Magazine',
+    org: 'Exhibition Magazine · par Olga Sokal',
     logoText: 'EX',
     description:
       "Parution presse : portrait signé par la photographe Olga Sokal pour le Room Issue d'Exhibition Magazine.",
@@ -104,18 +138,25 @@ export const TIMELINE: TimelineItem[] = [
     kind: 'formation',
     title: 'Prépa intégrée — 1re année',
     org: 'EFREI Paris',
-    logo: '/logos/efrei.svg',
+    logo: '/logos/efrei.webp',
     description: "Cycle préparatoire intégré : fondamentaux scientifiques et informatiques.",
   },
   {
     id: 'bac-2021',
-    period: '2021 – 2023',
+    period: '2019 – 2022',
     sortKey: 2021,
     kind: 'formation',
-    title: 'Baccalauréat Général',
+    title: 'Baccalauréat Technologique STI2D',
     org: 'Lycée Rosa Parks · Montgeron',
-    logoText: 'RP',
-    description: "Baccalauréat général.",
+    logo: '/logos/rosa-parks.png',
+    description:
+      "Baccalauréat STI2D (Sciences et Technologies de l'Industrie et du Développement Durable).",
+    tags: ['SOLIDWORKS', 'Python'],
+    photos: [
+      '/experiences/bac-2021/01.jpg',
+      '/experiences/bac-2021/02.jpg',
+      '/experiences/bac-2021/03.jpg',
+    ],
   },
 ];
 

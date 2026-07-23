@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import PageTransition from '../components/ui/PageTransition';
 import SectionHeading from '../components/ui/SectionHeading';
 import Reveal from '../components/ui/Reveal';
+import ProjectCardImage from '../components/ui/ProjectCardImage';
 import { PROJECTS, type Project } from '../data/projects';
 
 type Filter = 'Tous' | Project['category'];
@@ -52,22 +53,26 @@ export default function Projects() {
             <Reveal key={p.id} delay={i * 0.05}>
               <Link
                 to={`/projects/${p.id}`}
-                className="group flex h-full flex-col justify-between border border-line p-6 transition-all duration-300 hover:border-signal hover:shadow-[6px_6px_0_0_theme(colors.signal)]"
+                className="group flex h-full flex-col justify-between border border-line transition-all duration-300 hover:border-signal hover:shadow-[6px_6px_0_0_theme(colors.signal)]"
               >
-                <div>
-                  <div className="mb-4 flex items-center justify-between">
-                    <span className="tech-label">{p.category}</span>
-                    <span className="font-mono text-xs text-smoke">
-                      {String(i + 1).padStart(2, '0')}
-                    </span>
-                  </div>
-                  <h2 className="font-display text-3xl transition-colors group-hover:text-signal">
-                    {p.title}
-                  </h2>
-                  <p className="mt-3 text-sm leading-relaxed text-smoke">{p.tagline}</p>
-                </div>
+                {/* Visuel de la carte (logo de marque ou capture) */}
+                <ProjectCardImage project={p} index={i} />
 
-                <div className="mt-6">
+                <div className="flex flex-1 flex-col p-6">
+                  <div className="mb-2">
+                    <div className="mb-3 flex items-center justify-between">
+                      <span className="tech-label">{p.category}</span>
+                      <span className="font-mono text-xs text-smoke">
+                        {String(i + 1).padStart(2, '0')}
+                      </span>
+                    </div>
+                    <h2 className="font-display text-3xl transition-colors group-hover:text-signal">
+                      {p.title}
+                    </h2>
+                    <p className="mt-3 text-sm leading-relaxed text-smoke">{p.tagline}</p>
+                  </div>
+
+                <div className="mt-auto pt-6">
                   <ul className="mb-4 flex flex-wrap gap-1.5">
                     {p.stack.slice(0, 4).map((s) => (
                       <li key={s} className="border border-line px-2 py-0.5 font-mono text-[11px] text-ink/60">
@@ -81,6 +86,7 @@ export default function Projects() {
                       Détail →
                     </span>
                   </span>
+                </div>
                 </div>
               </Link>
             </Reveal>

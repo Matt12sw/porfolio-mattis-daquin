@@ -22,6 +22,11 @@ export type Project = {
   /** Catégorie affichée sur la carte. */
   category: 'Académique' | 'Professionnel';
   /**
+   * Visuel de la carte projet (logo de marque ou capture d'écran).
+   * `fit: 'contain'` pour un logo, `'cover'` pour une photo plein cadre.
+   */
+  card?: { src: string; fit: 'contain' | 'cover'; bg?: string };
+  /**
    * Captures d'écran illustrant le projet (galerie sur la page détail).
    * `src` pointe vers un fichier à déposer dans public/… (voir README).
    * Si le fichier n'existe pas encore, un cadre « capture à venir » s'affiche.
@@ -36,6 +41,7 @@ export const PROJECTS: Project[] = [
     tagline: "Application web d'inventaire d'équipements, en usage interne.",
     year: '2025 · HP France',
     category: 'Professionnel',
+    card: { src: '/logos/hp.png', fit: 'contain', bg: '#ffffff' },
     context:
       "Durant un stage de deux mois chez HP France, développement d'un outil interne de gestion d'inventaire pour le suivi des équipements de l'entreprise.",
     role: 'Développeur full-stack — conception de la base de données, du back-end et de l’interface.',
@@ -109,6 +115,7 @@ export const PROJECTS: Project[] = [
     tagline: "Application interne d'assistance et d'automatisation de processus.",
     year: '2026 · Orange',
     category: 'Professionnel',
+    card: { src: '/logos/orange.jpg', fit: 'contain', bg: '#ffffff' },
     context:
       "Stage chez Orange : contribution à une application web interne de gestion et de suivi des incidents techniques clients, destinée aux équipes de support et aux techniciens.",
     role: 'Développeur — automatisation de processus et intégration de services.',
@@ -154,6 +161,7 @@ export const PROJECTS: Project[] = [
     tagline: 'Back-end temps réel et API REST pour un jeu multijoueur.',
     year: '2024 · EFREI',
     category: 'Académique',
+    card: { src: '/logos/efrei.webp', fit: 'contain', bg: '#ffffff' },
     context:
       "Projet académique : conception du back-end d'un jeu en ligne multijoueur avec gestion des utilisateurs et des données de partie.",
     role: 'Développeur back-end.',
@@ -174,6 +182,7 @@ export const PROJECTS: Project[] = [
     tagline: 'Plateforme de streaming de séries — challenge web en équipe.',
     year: '2024 · EFREI',
     category: 'Académique',
+    card: { src: '/logos/streamflix.png', fit: 'contain', bg: '#0A0A0A' },
     context:
       "Projet académique réalisé dans le cadre d'un challenge web en équipe : un site de streaming permettant la consultation et la lecture de séries.",
     role: 'Développeur full-stack au sein d’une équipe.',
@@ -221,6 +230,7 @@ export const PROJECTS: Project[] = [
     tagline: 'Site vitrine responsive de présentation de vélos.',
     year: '2023 · EFREI',
     category: 'Académique',
+    card: { src: '/projects/smartbike/01-accueil.jpeg', fit: 'cover' },
     context:
       "Projet académique : conception et développement d'un site vitrine dédié à la présentation de vélos.",
     role: 'Développeur front-end — intégration et responsive.',

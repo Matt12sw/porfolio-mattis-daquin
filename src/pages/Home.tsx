@@ -60,11 +60,21 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Colonne 3D — plein cadre à droite (demi-écran en desktop) */}
+          {/* Colonne 3D — scène « projecteur » sombre pour l'hologramme */}
           <div className="order-1 flex flex-col lg:order-2">
-            {/* Wrapper à hauteur fixe : le Canvas R3F remplit ce conteneur. */}
-            <div className="h-[42vh] w-full lg:h-[70vh]">
+            {/* Stage sombre : fait ressortir l'hologramme cyan (halo radial). */}
+            <div className="relative h-[46vh] w-full overflow-hidden rounded-sm bg-ink lg:h-[74vh]">
+              <div
+                className="pointer-events-none absolute inset-0"
+                style={{
+                  background:
+                    'radial-gradient(60% 55% at 50% 55%, rgba(56,209,255,0.16), transparent 70%)',
+                }}
+                aria-hidden="true"
+              />
               <HeroCanvas />
+              {/* Liseré signal en coin, clin d'œil à la charte. */}
+              <span className="absolute right-3 top-3 h-2.5 w-2.5 rounded-full bg-signal" aria-hidden="true" />
             </div>
             <p className="mt-4 text-center font-mono text-xs text-smoke lg:text-right">
               {reduced

@@ -32,16 +32,16 @@ export default function HologramPortrait({ src, frozen, segments }: Props) {
     return img && img.width && img.height ? img.width / img.height : 0.75;
   }, [texture]);
 
-  const height = 3.2;
+  const height = 4.3;
   const width = height * aspect;
 
   const uniforms = useMemo(
     () => ({
       uTex: { value: texture },
       uTime: { value: 0 },
-      uAmp: { value: 0.9 },
-      uInk: { value: new THREE.Color('#0A0A0A') },
-      uPaper: { value: new THREE.Color('#FBFBF9') },
+      uAmp: { value: 1.05 },
+      uCyan: { value: new THREE.Color('#39d6ff') },
+      uCyanDeep: { value: new THREE.Color('#0a7ea8') },
       uSignal: { value: new THREE.Color('#E4002B') },
     }),
     [texture]
@@ -108,8 +108,8 @@ export default function HologramPortrait({ src, frozen, segments }: Props) {
     }
   });
 
-  // Mise à l'échelle selon la largeur du viewport 3D.
-  const scale = Math.min(1.25, Math.max(0.65, viewport.width / 6.5));
+  // Mise à l'échelle selon la largeur du viewport 3D (plus grand qu'avant).
+  const scale = Math.min(1.55, Math.max(0.8, viewport.width / 5.2));
 
   return (
     <group ref={groupRef} scale={scale}>
@@ -120,6 +120,7 @@ export default function HologramPortrait({ src, frozen, segments }: Props) {
           uniforms={uniforms}
           transparent
           depthWrite={false}
+          blending={THREE.AdditiveBlending}
           vertexShader={VERT}
           fragmentShader={FRAG}
         />
@@ -148,41 +149,44 @@ const VERT = /* glsl */ `
     vec4 mv = modelViewMatrix * vec4(pos, 1.0);
     gl_Position = projectionMatrix * mv;
 
-    // Taille des points attenuée par la distance.
-    gl_PointSize = 2.4 * (1.0 / -mv.z) * 90.0 / 100.0;
+    // Taille des points — plus gros pour un hologramme bien lisible.
+    gl_PointSize = 5.0 * (1.0 / -mv.z);
   }
 `;
 
 const FRAG = /* glsl */ `
   precision mediump float;
-  uniform sampler2D uTex;
   uniform float uTime;
-  uniform vec3 uInk;
-  uniform vec3 uPaper;
+  uniform vec3 uCyan;
+  uniform vec3 uCyanDeep;
   uniform vec3 uSignal;
   varying vec2 vUv;
   varying float vLum;
 
   void main() {
-    // Point circulaire doux.
+    // Point circulaire doux (halo).
     vec2 d = gl_PointCoord - vec2(0.5);
-    if (dot(d, d) > 0.25) discard;
+    float dist = dot(d, d);
+    if (dist > 0.25) discard;
+    float soft = smoothstep(0.25, 0.0, dist);
 
-    // Duotone encre → papier selon la luminosité.
-    vec3 col = mix(uInk, uPaper, smoothstep(0.05, 0.85, vLum));
+    // Hologramme cyan : plus la photo est claire, plus le point brille.
+    float b = smoothstep(0.05, 0.9, vLum);
+    vec3 col = mix(uCyanDeep, uCyan, b) * (0.35 + b * 1.1);
 
-    // Lignes de balayage rouge signal qui montent (effet hologramme).
-    float scan = sin(vUv.y * 140.0 - uTime * 3.0);
-    float scanMask = smoothstep(0.6, 1.0, scan);
-    col = mix(col, uSignal, scanMask * 0.5);
+    // Lignes de balayage horizontales qui montent.
+    float scan = sin(vUv.y * 160.0 - uTime * 3.5);
+    col += uCyan * smoothstep(0.5, 1.0, scan) * 0.35;
 
     // Ligne de scan brillante qui balaie verticalement.
-    float sweep = smoothstep(0.02, 0.0, abs(fract(vUv.y - uTime * 0.12) - 0.5) - 0.01);
-    col = mix(col, uSignal, sweep * 0.6);
+    float sweep = smoothstep(0.02, 0.0, abs(fract(vUv.y - uTime * 0.1) - 0.5) - 0.008);
+    col += uCyan * sweep * 0.8;
 
-    // Les zones très sombres deviennent transparentes (fond papier visible).
-    float alpha = smoothstep(0.02, 0.25, vLum) * 0.92 + 0.08;
+    // Un soupçon de rouge signal sur les hautes lumières (clin d'œil charte).
+    col += uSignal * smoothstep(0.75, 1.0, vLum) * 0.15;
 
+    // Blending additif : l'intensité vient de la luminosité.
+    float alpha = (0.15 + b * 0.85) * soft;
     gl_FragColor = vec4(col, alpha);
   }
 `;

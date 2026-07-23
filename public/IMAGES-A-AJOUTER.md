@@ -1,40 +1,26 @@
 # Images du portfolio — état
 
-Ce fichier suit quelles captures sont en place et lesquelles restent à fournir.
-Tant qu'un fichier est absent, un cadre « capture à venir » propre s'affiche à
-sa place (jamais d'image cassée).
+Toutes les captures prévues sont intégrées. Ce fichier sert de référence si tu
+veux ajouter/remplacer des images plus tard. Tant qu'un fichier référencé est
+absent, un cadre « capture à venir » propre s'affiche à sa place (jamais
+d'image cassée).
 
-## ✅ Fait
+## ✅ Intégré
 
-- **Projet HP France — CWC Inventory** (`/projects/cwc-inventory`) : 10 captures
-  intégrées (carte interactive, fiche équipement, ajout, panneau
-  d'administration, zones, catégories, fabricants, utilisateurs, configuration).
-- **Projet Orange — Suivi d'incidents** (`/projects/incident-tracker`) :
-  4 workflows n8n intégrés (surveillance EBUS, sonde LLM proxy, sous-workflows
-  fenêtre de surveillance et envoi d'email).
-- **Portrait (page À propos)** : `public/portrait.jpg` = le gros plan N&B
-  éditorial. Trois alternatives sont conservées dans `public/` :
-  - `portrait-alt1-reflet.jpg` (double exposition / sculpture osier)
-  - `portrait-alt2-porte.jpg` (plan pied, veste + cravate)
-  - `portrait-alt4-couleur.jpg` (pull vert, couleur)
-  Pour changer : renomme l'alternative voulue en `portrait.jpg`.
+- **Portrait (À propos)** — `public/portrait.jpg` (gros plan N&B). Alternatives
+  conservées : `portrait-alt1-reflet.jpg`, `portrait-alt2-porte.jpg`,
+  `portrait-alt4-couleur.jpg`. Pour changer : renomme l'alternative en
+  `portrait.jpg`.
+- **HP France — CWC Inventory** (`/projects/cwc-inventory`) — 10 captures.
+- **Orange — Suivi d'incidents** (`/projects/incident-tracker`) — 4 workflows n8n.
+- **Streamflix** (`/projects/streamflix`) — 5 captures (accueil, top 10,
+  catalogue par genres, science-fiction + footer, logo).
+- **SmartBike** (`/projects/smartbike`) — 3 captures (aperçu responsive, fiche
+  produit, plan du site).
 
-## ⏳ À fournir
+## Ajouter / remplacer une image plus tard
 
-### Projet Streamflix  (`/projects/streamflix`)
-```
-public/projects/streamflix/01-accueil.png        → Accueil / catalogue de séries
-public/projects/streamflix/02-fiche-serie.png    → Fiche série (détails + lecture)
-public/projects/streamflix/03-navigation.png     → Navigation dans la plateforme
-```
-
-### Projet SmartBike  (`/projects/smartbike`)
-```
-public/projects/smartbike/01-accueil.png         → Page d'accueil
-public/projects/smartbike/02-catalogue.png       → Présentation des vélos
-public/projects/smartbike/03-responsive.png      → Vue responsive
-```
-
-> Noms indicatifs : envoie-moi les captures (upload GitHub ou pièce jointe) et
-> j'ajuste le nombre de vues et les légendes au contenu réel — comme pour HP et
-> Orange.
+1. Dépose le fichier dans le dossier `public/projects/<projet>/`.
+2. Ajoute (ou modifie) l'entrée correspondante dans le tableau `images` du
+   projet, dans `src/data/projects.ts` (`src`, `alt`, `caption`).
+3. `npm run build` puis commit / push.

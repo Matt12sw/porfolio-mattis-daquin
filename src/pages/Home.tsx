@@ -25,18 +25,18 @@ export default function Home() {
               transition={{ duration: 0.6 }}
               className="tech-label mb-6"
             >
-              <span className="text-signal">●</span> Développeur full-stack / Mannequin
+              <span className="text-signal">●</span> Développeur Full-Stack · EFREI Paris
             </motion.p>
 
             <h1 className="text-display-xl">
               <span className="block">Code</span>
-              <span className="block text-signal">/ Image</span>
+              <span className="block text-signal">/ Craft</span>
             </h1>
 
             <p className="mt-6 max-w-md text-lg text-smoke">
               Mattis Daquin — je conçois des applications web performantes et
-              centrées utilisateur, et je pose devant l'objectif. Deux
-              disciplines, une même exigence de précision.
+              centrées sur l'utilisateur, du back-end à l'interface. Rigueur,
+              curiosité, et le goût du détail bien fait.
             </p>
 
             {/* CTA : CV + GitHub */}
@@ -69,7 +69,7 @@ export default function Home() {
             <p className="mt-4 text-center font-mono text-xs text-smoke lg:text-right">
               {reduced
                 ? '// scène figée — animations réduites'
-                : '// bougez la souris — le nuage passe du code à la silhouette'}
+                : '// bougez la souris pour inspecter le nuage de points'}
             </p>
           </div>
         </div>
@@ -85,13 +85,13 @@ export default function Home() {
       {/* À propos condensé */}
       <section className="border-b border-line py-20 md:py-28">
         <div className="container-page grid gap-10 md:grid-cols-[1fr_1.4fr]">
-          <SectionHeading index="02" eyebrow="À propos" title={<>Deux mondes,<br />un même cadre</>} />
+          <SectionHeading index="02" eyebrow="À propos" title={<>Du back-end<br />à l'interface</>} />
           <Reveal className="max-w-xl">
             <p className="text-lg leading-relaxed text-ink/80">
               Étudiant en Bachelor Ingénierie du numérique à l'EFREI Paris, je
-              développe des applications full-stack et j'ai signé des missions
-              chez Orange et HP France. En parallèle, je suis mannequin pour Girl
-              MGMT (France) et BNM Models (Canada).
+              développe des applications web full-stack et j'ai signé des missions
+              chez <strong>Orange</strong> et <strong>HP France</strong>. Je
+              recherche une alternance de 12 mois à partir de septembre 2026.
             </p>
             <Link to="/about" className="link-underline mt-6 inline-block font-mono text-sm">
               En savoir plus →

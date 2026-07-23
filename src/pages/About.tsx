@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import PageTransition from '../components/ui/PageTransition';
 import SectionHeading from '../components/ui/SectionHeading';
@@ -7,7 +8,7 @@ import { CONTACT } from '../data/socials';
 const VALUES = [
   {
     k: 'Précision',
-    v: "Qu'il s'agisse d'une API ou d'une pose, le détail fait la différence. Je travaille au geste juste.",
+    v: "D'une requête SQL à un composant d'interface, le détail fait la différence. Je travaille au geste juste.",
   },
   {
     k: 'Curiosité',
@@ -30,7 +31,7 @@ export default function About() {
         <SectionHeading
           index="02"
           eyebrow="À propos"
-          title={<>Développeur le jour,<br />mannequin à l'objectif</>}
+          title={<>Développeur full-stack,<br />du back-end à l'interface</>}
           className="mb-16 max-w-3xl"
         />
 
@@ -40,22 +41,13 @@ export default function About() {
           <Reveal>
             <figure className="relative">
               <div className="relative aspect-[3/4] w-full overflow-hidden border border-line bg-grid">
-                {/* Placeholder — remplacer par une vraie photo portrait. */}
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="text-center">
-                    <div className="mx-auto mb-4 grid h-24 w-24 place-items-center rounded-full border border-ink/30 font-display text-4xl">
-                      MD
-                    </div>
-                    <p className="font-mono text-xs text-smoke">portrait.jpg</p>
-                    <p className="mt-1 font-mono text-[10px] text-smoke/70">
-                      // placeholder à remplacer
-                    </p>
-                  </div>
-                </div>
-                <span className="absolute right-3 top-3 h-3 w-3 rounded-full bg-signal" />
+                {/* Portrait — déposer le fichier dans public/portrait.jpg.
+                    En cas d'absence, un cadre de repli propre s'affiche. */}
+                <Portrait />
+                <span className="absolute right-3 top-3 z-10 h-3 w-3 rounded-full bg-signal" />
               </div>
               <figcaption className="mt-3 font-mono text-xs text-smoke">
-                Mattis Daquin — Paris, {CONTACT.location}
+                Mattis Daquin — {CONTACT.location}
               </figcaption>
             </figure>
           </Reveal>
@@ -64,8 +56,9 @@ export default function About() {
           <div className="space-y-8">
             <Reveal>
               <p className="text-2xl font-light leading-relaxed text-ink">
-                Je m'appelle Mattis, j'ai deux terrains de jeu qui se répondent :
-                <span className="text-signal"> l'écran et l'objectif</span>.
+                Je m'appelle Mattis, et je conçois des produits web
+                <span className="text-signal"> de bout en bout</span> — de la
+                base de données à l'interface.
               </p>
             </Reveal>
 
@@ -75,20 +68,29 @@ export default function About() {
                 2023–2027), je conçois des applications web performantes et
                 centrées sur les besoins des utilisateurs. J'ai mis les mains dans
                 le code en entreprise : une application de suivi d'incidents chez{' '}
-                <strong>Orange</strong> et un outil d'inventaire chez{' '}
-                <strong>HP France</strong>. Un échange académique à Toronto est
-                venu affûter mon anglais et mon autonomie.
+                <strong>Orange</strong> (automatisation N8N) et un outil
+                d'inventaire complet chez <strong>HP France</strong> (PHP / SQL,
+                interface bilingue et panneau d'administration). Un échange
+                académique à Toronto est venu affûter mon anglais et mon
+                autonomie.
               </p>
             </Reveal>
 
             <Reveal delay={0.1}>
               <p className="leading-relaxed text-ink/80">
-                En parallèle, je suis mannequin — représenté par{' '}
-                <strong>Girl MGMT</strong> en France et <strong>BNM Models</strong>{' '}
-                au Canada : Fashion Week, e-commerce, éditorial. Un portrait signé
-                Olga Sokal a été publié dans Exhibition Magazine. Cette double vie
-                m'a appris à passer d'un langage à l'autre — technique et visuel —
-                sans jamais perdre le fil de l'exigence.
+                J'aime les projets où la rigueur technique rencontre le soin du
+                détail : une API propre, une interface lisible, un code que
+                l'équipe suivante comprend. À côté du code, je fais aussi du
+                mannequinat —{' '}
+                <a
+                  href="https://www.girlmgmt.com/models/men/development/1377-mattis-daquin"
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="link-underline font-medium text-ink"
+                >
+                  voir mon portfolio Girl MGMT
+                </a>
+                .
               </p>
             </Reveal>
 
@@ -140,5 +142,38 @@ export default function About() {
         </div>
       </section>
     </PageTransition>
+  );
+}
+
+/**
+ * Portrait : affiche public/portrait.jpg si présent, sinon un cadre de repli
+ * (initiales + nom du fichier attendu) pour ne jamais montrer d'image cassée.
+ */
+function Portrait() {
+  const [failed, setFailed] = useState(false);
+
+  if (failed) {
+    return (
+      <div className="absolute inset-0 flex items-center justify-center">
+        <div className="text-center">
+          <div className="mx-auto mb-4 grid h-24 w-24 place-items-center rounded-full border border-ink/30 font-display text-4xl">
+            MD
+          </div>
+          <p className="font-mono text-xs text-smoke">portrait.jpg</p>
+          <p className="mt-1 font-mono text-[10px] text-smoke/70">
+            // à déposer dans public/
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <img
+      src="/portrait.jpg"
+      alt="Portrait de Mattis Daquin"
+      onError={() => setFailed(true)}
+      className="absolute inset-0 h-full w-full object-cover"
+    />
   );
 }

@@ -1,6 +1,7 @@
 import { Link, useParams } from 'react-router-dom';
 import PageTransition from '../components/ui/PageTransition';
 import Reveal from '../components/ui/Reveal';
+import ProjectGallery from '../components/ui/ProjectGallery';
 import { getProject, PROJECTS } from '../data/projects';
 
 export default function ProjectDetail() {
@@ -99,6 +100,13 @@ export default function ProjectDetail() {
                 ))}
               </ul>
             </Reveal>
+
+            {/* Galerie de captures (si le projet en fournit). */}
+            {project.images && project.images.length > 0 && (
+              <Reveal>
+                <ProjectGallery images={project.images} />
+              </Reveal>
+            )}
           </div>
 
           {/* Aside : stack */}

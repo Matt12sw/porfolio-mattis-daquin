@@ -17,8 +17,8 @@ export default function Footer() {
             <span className="text-signal">.</span>
           </p>
           <p className="mt-3 max-w-xs text-sm text-smoke">
-            Développeur full-stack & mannequin. Deux disciplines, une même exigence :
-            la précision du geste.
+            Développeur full-stack en formation à l'EFREI Paris. Des applications
+            web performantes, du back-end à l'interface.
           </p>
           <a
             href={`mailto:${CONTACT.email}`}

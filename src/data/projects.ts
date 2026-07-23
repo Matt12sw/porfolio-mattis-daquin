@@ -21,6 +21,12 @@ export type Project = {
   repo?: string;
   /** Catégorie affichée sur la carte. */
   category: 'Académique' | 'Professionnel';
+  /**
+   * Captures d'écran illustrant le projet (galerie sur la page détail).
+   * `src` pointe vers un fichier à déposer dans public/… (voir README).
+   * Si le fichier n'existe pas encore, un cadre « capture à venir » s'affiche.
+   */
+  images?: { src: string; alt: string; caption: string }[];
 };
 
 export const PROJECTS: Project[] = [
@@ -41,8 +47,41 @@ export const PROJECTS: Project[] = [
     results: [
       'Meilleur suivi des équipements et identification des produits défectueux.',
       'Renouvellement du parc facilité par des données à jour.',
+      'Interface bilingue (FR/EN) et panneau d’administration complet.',
     ],
     stack: ['HTML', 'PHP', 'JavaScript', 'SQL'],
+    images: [
+      {
+        src: '/projects/cwc-inventory/01-carte-interactive.png',
+        alt: "Carte interactive de l'inventaire HP CWC par zones",
+        caption: 'Carte interactive CWC — inventaire par zones et volumes d’équipements.',
+      },
+      {
+        src: '/projects/cwc-inventory/02-detail-equipement.png',
+        alt: "Fiche détaillée d'un équipement avec spécifications techniques",
+        caption: 'Fiche équipement — description, spécifications techniques et statut.',
+      },
+      {
+        src: '/projects/cwc-inventory/03-admin-vue-ensemble.png',
+        alt: "Panneau d'administration, vue d'ensemble",
+        caption: 'Panneau d’administration — vue d’ensemble (zones, catégories, fabricants).',
+      },
+      {
+        src: '/projects/cwc-inventory/04-gestion-zones.png',
+        alt: 'Écran de gestion des zones CWC',
+        caption: 'Gestion des zones — création, édition (nom + couleur) et suppression.',
+      },
+      {
+        src: '/projects/cwc-inventory/05-gestion-categories.png',
+        alt: 'Gestion des catégories produits en arborescence',
+        caption: 'Gestion des catégories — arborescence produits (HP Solutions, Personal Systems…).',
+      },
+      {
+        src: '/projects/cwc-inventory/06-ajout-equipement.png',
+        alt: "Formulaire d'ajout d'un équipement",
+        caption: 'Ajout d’un équipement — image, catégorie, zone, statut et spécifications.',
+      },
+    ],
   },
   {
     id: 'incident-tracker',
@@ -61,8 +100,33 @@ export const PROJECTS: Project[] = [
     results: [
       'Amélioration des outils d’assistance des équipes support.',
       'Découverte et mise en œuvre concrète de l’automatisation low-code.',
+      'Chaîne complète : surveillance, détection d’incident, rédaction IA et alerte email.',
     ],
     stack: ['N8N', 'Perl', 'JavaScript'],
+    images: [
+      {
+        src: '/projects/incident-tracker/01-surveillance-trafic-ebus.png',
+        alt: 'Workflow n8n de surveillance du trafic EBUS',
+        caption:
+          'Workflow principal — surveillance du trafic EBUS : planification, requête ES, analyse par machine à états, agent IA de rédaction puis envoi de l’alerte.',
+      },
+      {
+        src: '/projects/incident-tracker/02-sonde-llm-proxy.png',
+        alt: 'Workflow n8n de sonde santé du proxy LLM',
+        caption:
+          'Workflow — sonde santé du proxy LLM : détection de changement d’état et alerte conditionnelle.',
+      },
+      {
+        src: '/projects/incident-tracker/03-sub-fenetre-surveillance.png',
+        alt: 'Sous-workflow n8n de calcul de la fenêtre de surveillance',
+        caption: 'Sous-workflow — calcul de la fenêtre de surveillance (réutilisable).',
+      },
+      {
+        src: '/projects/incident-tracker/04-sub-envoi-email-alerte.png',
+        alt: "Sous-workflow n8n d'envoi d'email d'alerte",
+        caption: 'Sous-workflow — envoi d’email d’alerte (SMTP / RabbitMQ).',
+      },
+    ],
   },
   {
     id: 'multiplayer-game',

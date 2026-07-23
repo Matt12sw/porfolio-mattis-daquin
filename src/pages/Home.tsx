@@ -68,8 +68,8 @@ export default function Home() {
             </div>
             <p className="mt-4 text-center font-mono text-xs text-smoke lg:text-right">
               {reduced
-                ? '// scène figée — animations réduites'
-                : '// bougez la souris pour inspecter le nuage de points'}
+                ? '// hologramme figé — animations réduites'
+                : '// maintenez le clic gauche et bougez pour faire tourner l’hologramme'}
             </p>
           </div>
         </div>

@@ -126,6 +126,7 @@ export const TIMELINE: TimelineItem[] = [
     kind: 'parution',
     title: 'Portrait éditorial — Room Issue',
     org: 'Exhibition Magazine · par Olga Sokal',
+    logo: '/logos/exhibitionexperiences_logo.jpg',
     logoText: 'EX',
     description:
       "Parution presse : portrait signé par la photographe Olga Sokal pour le Room Issue d'Exhibition Magazine.",

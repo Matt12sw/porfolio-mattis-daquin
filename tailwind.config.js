@@ -19,6 +19,8 @@ export default {
         sans: ['"Inter"', 'system-ui', '-apple-system', 'sans-serif'],
         // Labels techniques.
         mono: ['"JetBrains Mono"', 'ui-monospace', 'SFMono-Regular', 'monospace'],
+        // Accents « arcade » 8-bit (à utiliser avec parcimonie, petites tailles).
+        pixel: ['"Press Start 2P"', 'ui-monospace', 'monospace'],
       },
       fontSize: {
         // Échelle typographique fluide (clamp) pour les grands titres.

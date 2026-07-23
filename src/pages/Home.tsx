@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import PageTransition from '../components/ui/PageTransition';
 import HeroCanvas from '../components/three/HeroCanvas';
+import PixelWorld from '../components/pixel/PixelWorld';
 import Reveal from '../components/ui/Reveal';
 import InteractiveTitle from '../components/ui/InteractiveTitle';
 import SectionHeading from '../components/ui/SectionHeading';
@@ -17,26 +18,38 @@ export default function Home() {
     <PageTransition>
       {/* ============================ HÉROS ============================ */}
       <section className="relative overflow-hidden border-b border-line">
-        <div className="container-page grid min-h-[calc(100vh-4rem)] items-center gap-8 py-12 lg:grid-cols-2 lg:gap-4">
+        {/* Décor pixel-art parallax (original, en arrière-plan). */}
+        <PixelWorld />
+
+        {/* Ballons 3D — plein cadre, au-dessus du décor, sous le texte. */}
+        <div className="absolute inset-0 z-[1]">
+          <HeroCanvas />
+        </div>
+
+        {/* Voile papier : garde le texte lisible par-dessus les ballons. */}
+        <div
+          className="absolute inset-0 z-[1] bg-gradient-to-b from-paper/85 via-paper/40 to-paper/70 lg:bg-gradient-to-r lg:from-paper lg:via-paper/50 lg:to-transparent"
+          aria-hidden="true"
+        />
+
+        <div className="container-page relative z-[2] grid min-h-[calc(100vh-4rem)] items-center py-12 lg:grid-cols-2">
           {/* Colonne texte */}
-          <div className="relative z-10 order-2 lg:order-1">
+          <div className="order-2 lg:order-1">
             <motion.p
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              className="tech-label mb-6"
+              className="mb-6 inline-flex items-center gap-2 border border-ink bg-paper/80 px-3 py-2 font-pixel text-[10px] uppercase text-ink backdrop-blur-sm"
             >
-              <span className="text-signal">●</span> Développeur Full-Stack · EFREI Paris
+              <span className="text-signal">▶</span> Player 01 — Développeur Full-Stack
             </motion.p>
 
-            <InteractiveTitle
-              lines={[{ text: 'CODE' }, { text: '/ CRAFT', accent: true }]}
-            />
+            <InteractiveTitle lines={[{ text: 'MATTIS' }, { text: 'DAQUIN', accent: true }]} />
 
             <p className="mt-6 max-w-md text-lg text-smoke">
-              Mattis Daquin — je conçois des applications web performantes et
-              centrées sur l'utilisateur, du back-end à l'interface. Rigueur,
-              curiosité, et le goût du détail bien fait.
+              Développeur full-stack en formation à l'EFREI Paris — je conçois des
+              applications web performantes et centrées sur l'utilisateur, du
+              back-end à l'interface.
             </p>
 
             {/* CTA : CV + GitHub */}
@@ -58,35 +71,21 @@ export default function Home() {
                 Voir GitHub ↗
               </a>
             </div>
-          </div>
 
-          {/* Colonne 3D — scène « projecteur » sombre pour l'hologramme */}
-          <div className="order-1 flex flex-col lg:order-2">
-            {/* Stage sombre : fait ressortir l'hologramme cyan (halo radial). */}
-            <div className="relative h-[46vh] w-full overflow-hidden rounded-sm bg-ink lg:h-[74vh]">
-              <div
-                className="pointer-events-none absolute inset-0"
-                style={{
-                  background:
-                    'radial-gradient(60% 55% at 50% 55%, rgba(56,209,255,0.16), transparent 70%)',
-                }}
-                aria-hidden="true"
-              />
-              <HeroCanvas />
-              {/* Liseré signal en coin, clin d'œil à la charte. */}
-              <span className="absolute right-3 top-3 h-2.5 w-2.5 rounded-full bg-signal" aria-hidden="true" />
-            </div>
-            <p className="mt-4 text-center font-mono text-xs text-smoke lg:text-right">
+            <p className="mt-8 font-mono text-xs text-smoke">
               {reduced
-                ? '// hologramme figé — animations réduites'
-                : '// maintenez le clic gauche et bougez pour faire tourner l’hologramme'}
+                ? '// animations réduites'
+                : '// bougez la souris — les ballons et le décor réagissent'}
             </p>
           </div>
+
+          {/* La colonne de droite reste vide : les ballons occupent le fond. */}
+          <div className="order-1 hidden lg:order-2 lg:block" aria-hidden="true" />
         </div>
 
         {/* Indicateur de scroll */}
-        <div className="pointer-events-none absolute inset-x-0 bottom-4 flex justify-center">
-          <span className="tech-label animate-bounce">↓ défiler</span>
+        <div className="pointer-events-none absolute inset-x-0 bottom-4 z-[2] flex justify-center">
+          <span className="font-pixel text-[9px] uppercase text-ink/70">↓ défiler</span>
         </div>
       </section>
 

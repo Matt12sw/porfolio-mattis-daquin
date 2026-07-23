@@ -12,14 +12,14 @@ sa place (jamais d'image cassée).
 - **Projet Orange — Suivi d'incidents** (`/projects/incident-tracker`) :
   4 workflows n8n intégrés (surveillance EBUS, sonde LLM proxy, sous-workflows
   fenêtre de surveillance et envoi d'email).
+- **Portrait (page À propos)** : `public/portrait.jpg` = le gros plan N&B
+  éditorial. Trois alternatives sont conservées dans `public/` :
+  - `portrait-alt1-reflet.jpg` (double exposition / sculpture osier)
+  - `portrait-alt2-porte.jpg` (plan pied, veste + cravate)
+  - `portrait-alt4-couleur.jpg` (pull vert, couleur)
+  Pour changer : renomme l'alternative voulue en `portrait.jpg`.
 
 ## ⏳ À fournir
-
-### Portrait (page À propos)
-```
-public/portrait.jpg
-```
-Format portrait (ratio ~3:4 conseillé) — la photo noir & blanc.
 
 ### Projet Streamflix  (`/projects/streamflix`)
 ```

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import PageTransition from '../components/ui/PageTransition';
 import SectionHeading from '../components/ui/SectionHeading';
 import Reveal from '../components/ui/Reveal';
+import SportsSection from '../components/sections/SportsSection';
 import { CONTACT } from '../data/socials';
 
 const VALUES = [
@@ -81,17 +82,35 @@ export default function About() {
                 J'aime les projets où la rigueur technique rencontre le soin du
                 détail : une API propre, une interface lisible, un code que
                 l'équipe suivante comprend. À côté du code, je fais aussi du
-                mannequinat —{' '}
-                <a
-                  href="https://www.girlmgmt.com/models/men/development/1377-mattis-daquin"
-                  target="_blank"
-                  rel="noreferrer noopener"
-                  className="link-underline font-medium text-ink"
-                >
-                  voir mon portfolio Girl MGMT
-                </a>
-                .
+                mannequinat.
               </p>
+
+              {/* Agence de mannequinat — logo + lien */}
+              <a
+                href="https://www.girlmgmt.com/models/men/development/1377-mattis-daquin"
+                target="_blank"
+                rel="noreferrer noopener"
+                className="group inline-flex items-center gap-3 border border-line px-4 py-3 transition-colors duration-300 hover:border-signal"
+              >
+                <span className="grid h-10 w-10 shrink-0 place-items-center overflow-hidden border border-line bg-white">
+                  <img
+                    src="/logos/girl-mgmt.jpg"
+                    alt="Logo Girl MGMT"
+                    className="h-full w-full object-contain p-0.5"
+                    onError={(e) => {
+                      (e.currentTarget.style.display = 'none');
+                    }}
+                  />
+                </span>
+                <span>
+                  <span className="block font-mono text-xs uppercase tracking-widest text-smoke">
+                    Agence · Mannequinat
+                  </span>
+                  <span className="block font-semibold text-ink transition-colors group-hover:text-signal">
+                    Portfolio Girl MGMT →
+                  </span>
+                </span>
+              </a>
             </Reveal>
 
             <Reveal delay={0.15}>
@@ -120,17 +139,8 @@ export default function About() {
           </div>
         </div>
 
-        {/* Sports / discipline */}
-        <Reveal className="mt-16 flex flex-wrap items-center gap-x-6 gap-y-2 border-t border-line pt-8">
-          <span className="tech-label">Discipline forgée par le sport :</span>
-          {['Volley — ESYVB (régional)', 'Natation — SNM Montgeron', 'Basket — ESMBB'].map(
-            (s) => (
-              <span key={s} className="font-mono text-sm text-ink/70">
-                {s}
-              </span>
-            )
-          )}
-        </Reveal>
+        {/* Sport — 3 divs animées */}
+        <SportsSection />
 
         <div className="mt-16 flex flex-wrap gap-3">
           <Link to="/experience" className="btn-primary">

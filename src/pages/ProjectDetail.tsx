@@ -1,8 +1,9 @@
+import { useState, type ReactNode } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import PageTransition from '../components/ui/PageTransition';
 import Reveal from '../components/ui/Reveal';
 import ProjectGallery from '../components/ui/ProjectGallery';
-import { getProject, PROJECTS } from '../data/projects';
+import { getProject, PROJECTS, type Project } from '../data/projects';
 
 export default function ProjectDetail() {
   const { id } = useParams<{ id: string }>();
@@ -28,6 +29,8 @@ export default function ProjectDetail() {
   const prev = PROJECTS[(index - 1 + PROJECTS.length) % PROJECTS.length];
   const next = PROJECTS[(index + 1) % PROJECTS.length];
 
+  const images = project.images ?? [];
+
   return (
     <PageTransition>
       <article className="container-page py-16 md:py-24">
@@ -41,7 +44,7 @@ export default function ProjectDetail() {
         </nav>
 
         {/* En-tête */}
-        <header className="mb-16 border-b border-line pb-12">
+        <header className="border-b border-line pb-12">
           <div className="mb-4 flex flex-wrap items-center gap-3">
             <span className="tech-label text-signal">{project.category}</span>
             <span className="h-px w-8 bg-line" aria-hidden="true" />
@@ -49,6 +52,15 @@ export default function ProjectDetail() {
           </div>
           <h1 className="text-display-lg">{project.title}</h1>
           <p className="mt-4 max-w-2xl text-xl text-smoke">{project.tagline}</p>
+
+          {/* Stack en badges */}
+          <ul className="mt-6 flex flex-wrap gap-2">
+            {project.stack.map((s) => (
+              <li key={s} className="border border-line px-2.5 py-1 font-mono text-xs text-ink/80">
+                {s}
+              </li>
+            ))}
+          </ul>
 
           {project.repo && (
             <a
@@ -62,86 +74,162 @@ export default function ProjectDetail() {
           )}
         </header>
 
-        {/* Corps : contexte / rôle / choix / résultats */}
-        <div className="grid gap-16 lg:grid-cols-[2fr_1fr]">
-          <div className="space-y-14">
-            <Reveal>
-              <h2 className="mb-4 font-display text-2xl">Contexte</h2>
-              <p className="max-w-2xl leading-relaxed text-ink/80">{project.context}</p>
-            </Reveal>
+        {/* Image d'ouverture (grand format) */}
+        {images[0] && (
+          <Reveal className="mt-12">
+            <CaseImage src={images[0].src} alt={images[0].alt} caption={images[0].caption} tall />
+          </Reveal>
+        )}
 
-            <Reveal>
-              <h2 className="mb-4 font-display text-2xl">Mon rôle</h2>
-              <p className="max-w-2xl leading-relaxed text-ink/80">{project.role}</p>
-            </Reveal>
+        {/* ---- Études de cas en phases ---- */}
+        <div className="mt-8">
+          {/* 01 — Découverte */}
+          <Phase index="01" label="Découverte" title="Le contexte">
+            <p className="max-w-2xl leading-relaxed text-ink/80">{project.context}</p>
+          </Phase>
 
-            <Reveal>
-              <h2 className="mb-4 font-display text-2xl">Choix techniques</h2>
-              <ul className="max-w-2xl space-y-3">
-                {project.techChoices.map((c) => (
-                  <li key={c} className="flex gap-3 leading-relaxed text-ink/80">
-                    <span className="mt-2 h-1.5 w-1.5 shrink-0 bg-signal" aria-hidden="true" />
-                    {c}
-                  </li>
+          {/* 02 — Approche (rôle + choix techniques) */}
+          <Phase index="02" label="Approche" title="Rôle & choix techniques">
+            <p className="mb-6 max-w-2xl leading-relaxed text-ink/80">{project.role}</p>
+            <ul className="max-w-2xl space-y-3">
+              {project.techChoices.map((c) => (
+                <li key={c} className="flex gap-3 leading-relaxed text-ink/80">
+                  <span className="mt-2 h-1.5 w-1.5 shrink-0 bg-signal" aria-hidden="true" />
+                  {c}
+                </li>
+              ))}
+            </ul>
+
+            {/* Deux captures en écran partagé, façon étude de cas. */}
+            {(images[1] || images[2]) && (
+              <div className="mt-8 grid gap-4 sm:grid-cols-2">
+                {[images[1], images[2]].filter(Boolean).map((img) => (
+                  <CaseImage key={img!.src} src={img!.src} alt={img!.alt} caption={img!.caption} />
                 ))}
-              </ul>
-            </Reveal>
-
-            <Reveal>
-              <h2 className="mb-4 font-display text-2xl">Résultats</h2>
-              <ul className="max-w-2xl space-y-3">
-                {project.results.map((r) => (
-                  <li key={r} className="flex gap-3 leading-relaxed text-ink/80">
-                    <span className="mt-1.5 font-mono text-signal" aria-hidden="true">
-                      →
-                    </span>
-                    {r}
-                  </li>
-                ))}
-              </ul>
-            </Reveal>
-
-            {/* Galerie de captures (si le projet en fournit). */}
-            {project.images && project.images.length > 0 && (
-              <Reveal>
-                <ProjectGallery images={project.images} />
-              </Reveal>
+              </div>
             )}
-          </div>
+          </Phase>
 
-          {/* Aside : stack */}
-          <aside className="lg:sticky lg:top-24 lg:h-fit">
-            <div className="border border-line p-6">
-              <p className="tech-label mb-4">Stack technique</p>
-              <ul className="flex flex-wrap gap-2">
-                {project.stack.map((s) => (
-                  <li key={s} className="border border-line px-2.5 py-1 font-mono text-xs text-ink/80">
-                    {s}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </aside>
+          {/* 03 — Impact (résultats) */}
+          <Phase index="03" label="Impact" title="Les résultats" last>
+            <ul className="max-w-2xl space-y-3">
+              {project.results.map((r) => (
+                <li key={r} className="flex gap-3 leading-relaxed text-ink/80">
+                  <span className="mt-1.5 font-mono text-signal" aria-hidden="true">
+                    →
+                  </span>
+                  {r}
+                </li>
+              ))}
+            </ul>
+          </Phase>
         </div>
 
+        {/* Galerie — captures restantes */}
+        {images.length > 3 && (
+          <Reveal className="mt-8 border-t border-line pt-12">
+            <ProjectGallery images={images.slice(3)} />
+          </Reveal>
+        )}
+
         {/* Navigation projet précédent / suivant */}
-        <nav
-          aria-label="Autres projets"
-          className="mt-20 grid gap-px overflow-hidden border border-line bg-line sm:grid-cols-2"
-        >
-          <Link to={`/projects/${prev.id}`} className="group bg-paper p-6 hover:bg-ink hover:text-paper">
-            <span className="tech-label group-hover:text-paper/70">← Précédent</span>
-            <p className="mt-2 font-display text-xl">{prev.title}</p>
-          </Link>
-          <Link
-            to={`/projects/${next.id}`}
-            className="group bg-paper p-6 text-right hover:bg-ink hover:text-paper"
-          >
-            <span className="tech-label group-hover:text-paper/70">Suivant →</span>
-            <p className="mt-2 font-display text-xl">{next.title}</p>
-          </Link>
-        </nav>
+        <ProjectNav prev={prev} next={next} />
       </article>
     </PageTransition>
+  );
+}
+
+/**
+ * Bloc « phase » d'une étude de cas : colonne de gauche avec le numéro et le
+ * libellé (collante au scroll), colonne de droite avec le contenu.
+ */
+function Phase({
+  index,
+  label,
+  title,
+  children,
+  last,
+}: {
+  index: string;
+  label: string;
+  title: string;
+  children: ReactNode;
+  last?: boolean;
+}) {
+  return (
+    <Reveal
+      as="section"
+      className={`grid gap-6 py-12 lg:grid-cols-[0.5fr_1fr] lg:gap-12 ${
+        last ? '' : 'border-b border-line'
+      }`}
+    >
+      <div className="lg:sticky lg:top-24 lg:h-fit">
+        <div className="flex items-center gap-3">
+          <span className="font-display text-5xl text-signal">{index}</span>
+          <span className="h-px flex-1 bg-line lg:hidden" aria-hidden="true" />
+        </div>
+        <p className="tech-label mt-2">{label}</p>
+        <h2 className="mt-1 font-display text-2xl">{title}</h2>
+      </div>
+      <div>{children}</div>
+    </Reveal>
+  );
+}
+
+/** Image d'étude de cas avec cadre + légende et repli propre. */
+function CaseImage({
+  src,
+  alt,
+  caption,
+  tall,
+}: {
+  src: string;
+  alt: string;
+  caption: string;
+  tall?: boolean;
+}) {
+  const [failed, setFailed] = useState(false);
+  const ratio = tall ? 'aspect-[16/9]' : 'aspect-video';
+
+  return (
+    <figure>
+      {failed ? (
+        <div className={`bg-grid ${ratio} flex items-center justify-center border border-line bg-paper`}>
+          <span className="font-mono text-xs text-smoke/60">// capture à ajouter</span>
+        </div>
+      ) : (
+        <img
+          src={src}
+          alt={alt}
+          loading="lazy"
+          onError={() => setFailed(true)}
+          className={`${ratio} w-full border border-line object-cover object-top`}
+        />
+      )}
+      <figcaption className="mt-2 font-mono text-xs leading-relaxed text-smoke">
+        {caption}
+      </figcaption>
+    </figure>
+  );
+}
+
+function ProjectNav({ prev, next }: { prev: Project; next: Project }) {
+  return (
+    <nav
+      aria-label="Autres projets"
+      className="mt-20 grid gap-px overflow-hidden border border-line bg-line sm:grid-cols-2"
+    >
+      <Link to={`/projects/${prev.id}`} className="group bg-paper p-6 hover:bg-ink hover:text-paper">
+        <span className="tech-label group-hover:text-paper/70">← Précédent</span>
+        <p className="mt-2 font-display text-xl">{prev.title}</p>
+      </Link>
+      <Link
+        to={`/projects/${next.id}`}
+        className="group bg-paper p-6 text-right hover:bg-ink hover:text-paper"
+      >
+        <span className="tech-label group-hover:text-paper/70">Suivant →</span>
+        <p className="mt-2 font-display text-xl">{next.title}</p>
+      </Link>
+    </nav>
   );
 }

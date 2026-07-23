@@ -35,14 +35,24 @@ public/projects/incident-tracker/03-sub-fenetre-surveillance.png   → Sous-work
 public/projects/incident-tracker/04-sub-envoi-email-alerte.png     → Sous-workflow envoi email d'alerte
 ```
 
-## Projets à venir (SmartBike / Streamflix)
+## Projet Streamflix  (`/projects/streamflix`)
 
-Envoie-moi les captures et je câblerai les galeries de la même façon.
-Emplacements prévus :
 ```
-public/projects/smartbike/…
-public/projects/streamflix/…
+public/projects/streamflix/01-accueil.png       → Accueil / catalogue de séries
+public/projects/streamflix/02-fiche-serie.png    → Fiche série (détails + lecture)
+public/projects/streamflix/03-navigation.png     → Navigation dans la plateforme
 ```
+
+## Projet SmartBike  (`/projects/smartbike`)
+
+```
+public/projects/smartbike/01-accueil.png         → Page d'accueil
+public/projects/smartbike/02-catalogue.png       → Présentation des vélos
+public/projects/smartbike/03-responsive.png      → Vue responsive
+```
+
+> Ces noms de fichiers sont indicatifs : envoie-moi les captures et j'ajuste le
+> nombre de vues et les légendes au contenu réel.
 
 ## Comment les ajouter
 

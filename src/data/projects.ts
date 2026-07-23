@@ -167,6 +167,23 @@ export const PROJECTS: Project[] = [
       'Expérience de travail d’équipe en conditions de challenge.',
     ],
     stack: ['PHP', 'Java', 'HTML', 'CSS'],
+    images: [
+      {
+        src: '/projects/streamflix/01-accueil.png',
+        alt: "Page d'accueil de Streamflix avec le catalogue de séries",
+        caption: 'Accueil — catalogue de séries.',
+      },
+      {
+        src: '/projects/streamflix/02-fiche-serie.png',
+        alt: "Fiche d'une série avec lecture",
+        caption: 'Fiche série — détails et lecture.',
+      },
+      {
+        src: '/projects/streamflix/03-navigation.png',
+        alt: 'Navigation dans la plateforme Streamflix',
+        caption: 'Navigation dans la plateforme.',
+      },
+    ],
   },
   {
     id: 'smartbike',
@@ -187,6 +204,23 @@ export const PROJECTS: Project[] = [
       'Bases solides en intégration front-end.',
     ],
     stack: ['HTML', 'CSS'],
+    images: [
+      {
+        src: '/projects/smartbike/01-accueil.png',
+        alt: "Page d'accueil du site vitrine SmartBike",
+        caption: 'Accueil — présentation SmartBike.',
+      },
+      {
+        src: '/projects/smartbike/02-catalogue.png',
+        alt: 'Présentation des vélos SmartBike',
+        caption: 'Catalogue — présentation des vélos.',
+      },
+      {
+        src: '/projects/smartbike/03-responsive.png',
+        alt: 'Vue responsive du site SmartBike',
+        caption: 'Mise en page responsive.',
+      },
+    ],
   },
 ];
 

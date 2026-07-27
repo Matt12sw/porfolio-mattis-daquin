@@ -32,40 +32,95 @@ export default function SportsSection() {
     }
 
     const ctx = gsap.context(() => {
-      gsap.set(cards, { clipPath: 'inset(0 100% 0 0)', opacity: 0 });
-      gsap.set(basketRef.current, { left: '-12%', autoAlpha: 1 });
-      gsap.set(volleyRef.current, { left: '108%', autoAlpha: 1 });
+      const basket = basketRef.current!;
+      const volley = volleyRef.current!;
+      const basketBall = basket.firstElementChild as HTMLElement;
 
-      const tl = gsap.timeline({
-        scrollTrigger: { trigger: root, start: 'top 72%', once: true },
-      });
+      const build = (reverse: boolean) => {
+        // Sens de traversée : inversé si l'on remonte la page.
+        const from = reverse ? '108%' : '-12%';
+        const to = reverse ? '-12%' : '108%';
 
-      // Le basket dribble de gauche à droite en tournant…
-      tl.to(basketRef.current, {
-        left: '108%',
-        rotation: 1440,
-        duration: 1.7,
-        ease: 'power1.inOut',
-      })
-        // …et découvre les cartes au passage (essuyage gauche → droite).
-        .to(
+        gsap.set(cards, { clipPath: 'inset(0 100% 0 0)', opacity: 0 });
+        gsap.set(basket, { left: from, autoAlpha: 1, y: -140, scaleX: 1, scaleY: 1 });
+        gsap.set(volley, { left: to, autoAlpha: 1, y: 0 });
+
+        const tl = gsap.timeline();
+
+        // ---- BASKET : dribble (translation + rebonds + squash & stretch) ----
+        tl.to(basket, { left: to, duration: 2.0, ease: 'none' }, 0)
+          .to(basketBall, { rotation: reverse ? -1080 : 1080, duration: 2.0, ease: 'none' }, 0);
+
+        // 4 rebonds : chute (bounce.out) puis remontée (power2.out).
+        const bounces = [
+          { h: 140, d: 0.42 },
+          { h: 100, d: 0.36 },
+          { h: 62, d: 0.3 },
+          { h: 34, d: 0.24 },
+        ];
+        // Position de départ : à la hauteur du premier rebond.
+        gsap.set(basket, { y: -bounces[0].h });
+        let t = 0;
+        bounces.forEach(({ d }, i) => {
+          // Chute jusqu'au sol.
+          tl.to(basket, { y: 0, duration: d, ease: 'power2.in' }, t);
+          t += d;
+          // Impact : compression (squash) puis reprise (stretch).
+          tl.to(basketBall, { scaleX: 1.22, scaleY: 0.78, duration: 0.07, ease: 'power2.out' }, t)
+            .to(basketBall, { scaleX: 1, scaleY: 1, duration: 0.14, ease: 'elastic.out(1, 0.45)' }, t + 0.07);
+          // Remontée (sauf après le dernier rebond).
+          if (i < bounces.length - 1) {
+            const next = bounces[i + 1].h;
+            tl.to(basket, { y: -next, duration: d * 0.85, ease: 'power2.out' }, t + 0.05);
+            t += d * 0.85;
+          }
+        });
+
+        // ---- Révélation des cartes au passage du ballon ----
+        tl.to(
           cards,
           {
             clipPath: 'inset(0 0% 0 0)',
             opacity: 1,
             duration: 0.6,
-            stagger: 0.32,
+            stagger: { each: 0.3, from: reverse ? 'end' : 'start' },
             ease: 'power2.out',
           },
-          0.35
-        )
-        // Le volley repart en sens inverse (service).
-        .to(
-          volleyRef.current,
-          { left: '-12%', rotation: -1080, duration: 1.5, ease: 'power1.inOut' },
-          0.5
-        )
-        .to([basketRef.current, volleyRef.current], { autoAlpha: 0, duration: 0.3 }, '>-0.2');
+          0.4
+        );
+
+        // ---- VOLLEY : service en topspin (rotation rapide, trajectoire tendue) ----
+        tl.to(volley, { left: from, duration: 1.5, ease: 'power1.inOut' }, 0.55)
+          // Rotation rapide sur lui-même = effet lifté.
+          .to(
+            volley.firstElementChild,
+            { rotation: reverse ? 1800 : -1800, duration: 1.5, ease: 'none' },
+            0.55
+          )
+          // Trajectoire légèrement courbée (monte puis retombe).
+          .to(volley, { y: -90, duration: 0.6, ease: 'power2.out' }, 0.55)
+          .to(volley, { y: 20, duration: 0.9, ease: 'power2.in' }, 1.15);
+
+        tl.to([basket, volley], { autoAlpha: 0, duration: 0.3 }, '>-0.15');
+        return tl;
+      };
+
+      let tl = build(false);
+
+      ScrollTrigger.create({
+        trigger: root,
+        start: 'top 75%',
+        end: 'bottom 25%',
+        onEnter: () => {
+          tl.kill();
+          tl = build(false);
+        },
+        // Retour en arrière : on rejoue la traversée en sens inverse.
+        onEnterBack: () => {
+          tl.kill();
+          tl = build(true);
+        },
+      });
     }, root);
 
     return () => ctx.revert();

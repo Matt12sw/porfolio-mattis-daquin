@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import PageTransition from '../components/ui/PageTransition';
 import Reveal from '../components/ui/Reveal';
 import ProjectGallery from '../components/ui/ProjectGallery';
+import ReadingProgress from '../components/ui/ReadingProgress';
 import { getProject, PROJECTS, type Project } from '../data/projects';
 
 export default function ProjectDetail() {
@@ -33,6 +34,8 @@ export default function ProjectDetail() {
 
   return (
     <PageTransition>
+      {/* Progression de lecture de l'étude de cas. */}
+      <ReadingProgress />
       <article className="container-page py-16 md:py-24">
         {/* Fil d'Ariane */}
         <nav aria-label="Fil d'Ariane" className="mb-10 font-mono text-xs text-smoke">

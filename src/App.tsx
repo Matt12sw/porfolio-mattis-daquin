@@ -4,6 +4,7 @@ import { AnimatePresence } from 'framer-motion';
 import Layout from './components/layout/Layout';
 import ScrollToTop from './components/layout/ScrollToTop';
 import PageLoader from './components/ui/PageLoader';
+import { PortalProvider } from './components/ui/PortalTransition';
 
 // Chargement direct de l'accueil (première peinture), lazy pour le reste
 // afin d'alléger le bundle initial. Le canvas 3D est lui-même lazy dans Home.
@@ -23,6 +24,7 @@ export default function App() {
   const location = useLocation();
 
   return (
+    <PortalProvider>
     <Layout>
       <ScrollToTop />
       <Suspense fallback={<PageLoader />}>
@@ -40,5 +42,6 @@ export default function App() {
         </AnimatePresence>
       </Suspense>
     </Layout>
+    </PortalProvider>
   );
 }

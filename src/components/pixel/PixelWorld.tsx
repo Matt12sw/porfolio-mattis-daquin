@@ -37,6 +37,18 @@ export default function PixelWorld() {
           scrollTrigger: { trigger: root, start: 'top top', end: 'bottom top', scrub: true },
         });
       });
+
+      // Lévitation des îles : sin(time) décalé par île.
+      gsap.utils.toArray<SVGGElement>('.pw-island', root).forEach((island, i) => {
+        gsap.to(island, {
+          y: 14,
+          duration: 3 + i * 0.7,
+          ease: 'sine.inOut',
+          repeat: -1,
+          yoyo: true,
+          delay: i * 0.4,
+        });
+      });
     }, root);
 
     // Dérive horizontale douce à la souris.
@@ -69,7 +81,7 @@ export default function PixelWorld() {
           <Cloud x={520} y={180} s={4} />
         </g>
 
-        {/* ---------- Calque intermédiaire : collines + plateformes ---------- */}
+        {/* ---------- Calque intermédiaire : collines, plateformes, îles ---------- */}
         <g ref={midRef} opacity="0.7">
           <Hill x={-40} y={560} w={360} steps={6} />
           <Hill x={760} y={600} w={420} steps={7} />
@@ -77,6 +89,17 @@ export default function PixelWorld() {
           <Block x={324} y={300} red />
           <Block x={368} y={300} />
           <Platform x={900} y={360} len={4} />
+
+          {/* Îles flottantes : trois « stages » originaux (clin d'œil, sans copie). */}
+          <g className="pw-island">
+            <IslandPlatform x={60} y={330} />
+          </g>
+          <g className="pw-island">
+            <IslandDungeon x={470} y={430} />
+          </g>
+          <g className="pw-island">
+            <IslandCreature x={1000} y={200} />
+          </g>
         </g>
 
         {/* ---------- Calque proche : sol, pièces, créatures ---------- */}
@@ -98,6 +121,101 @@ export default function PixelWorld() {
         </g>
       </svg>
     </div>
+  );
+}
+
+/* ----------------------- Îles flottantes (stages) ----------------------- */
+
+/** Socle d'île commun : bloc de terre en escalier inversé. */
+function IslandBase({ w }: { w: number }) {
+  return (
+    <g>
+      <rect x="0" y="0" width={w} height="14" fill="#0A0A0A" />
+      <rect x="8" y="14" width={w - 16} height="12" fill="#2a2a2a" />
+      <rect x="20" y="26" width={w - 40} height="10" fill="#3d3d3d" />
+      <rect x="36" y="36" width={w - 72} height="8" fill="#555" />
+    </g>
+  );
+}
+
+/** Île 1 — « plateforme fantaisie » : personnage sautant sous un bloc. */
+function IslandPlatform({ x, y }: { x: number; y: number }) {
+  return (
+    <g transform={`translate(${x} ${y})`}>
+      <Block x={54} y={-70} red />
+      {/* Personnage générique en saut (silhouette originale). */}
+      <g transform="translate(58 -34)">
+        <rect x="6" y="0" width="16" height="8" fill="#E4002B" />
+        <rect x="2" y="8" width="24" height="10" fill="#f2c9a0" />
+        <rect x="7" y="11" width="4" height="4" fill="#0A0A0A" />
+        <rect x="17" y="11" width="4" height="4" fill="#0A0A0A" />
+        <rect x="4" y="18" width="20" height="12" fill="#1f4fd0" />
+        <rect x="0" y="16" width="6" height="8" fill="#f2c9a0" />
+        <rect x="22" y="12" width="6" height="8" fill="#f2c9a0" />
+        <rect x="6" y="30" width="6" height="6" fill="#0A0A0A" />
+        <rect x="16" y="30" width="6" height="6" fill="#0A0A0A" />
+      </g>
+      <IslandBase w={140} />
+    </g>
+  );
+}
+
+/** Île 2 — « aventure / donjon » : personnage ouvrant un coffre. */
+function IslandDungeon({ x, y }: { x: number; y: number }) {
+  return (
+    <g transform={`translate(${x} ${y})`}>
+      {/* Objet brillant qui s'échappe du coffre. */}
+      <g transform="translate(84 -74)">
+        <rect x="6" y="0" width="6" height="18" fill="#f2c200" />
+        <rect x="0" y="6" width="18" height="6" fill="#f2c200" />
+      </g>
+      {/* Coffre. */}
+      <g transform="translate(74 -46)">
+        <rect x="0" y="6" width="38" height="22" fill="#7a4a1e" stroke="#0A0A0A" strokeWidth="2" />
+        <rect x="0" y="0" width="38" height="8" fill="#95602c" stroke="#0A0A0A" strokeWidth="2" />
+        <rect x="16" y="10" width="6" height="10" fill="#f2c200" />
+      </g>
+      {/* Aventurier (silhouette originale, cape + capuche). */}
+      <g transform="translate(30 -48)">
+        <rect x="4" y="0" width="18" height="12" fill="#2e7d4f" />
+        <rect x="7" y="6" width="12" height="8" fill="#f2c9a0" />
+        <rect x="9" y="8" width="3" height="3" fill="#0A0A0A" />
+        <rect x="15" y="8" width="3" height="3" fill="#0A0A0A" />
+        <rect x="3" y="14" width="20" height="16" fill="#2e7d4f" />
+        <rect x="22" y="16" width="8" height="5" fill="#f2c9a0" />
+        <rect x="5" y="30" width="6" height="6" fill="#0A0A0A" />
+        <rect x="15" y="30" width="6" height="6" fill="#0A0A0A" />
+      </g>
+      <IslandBase w={130} />
+    </g>
+  );
+}
+
+/** Île 3 — « dresseur de créatures » : personnage devant un centre de soin. */
+function IslandCreature({ x, y }: { x: number; y: number }) {
+  return (
+    <g transform={`translate(${x} ${y})`}>
+      {/* Bâtiment de soin (croix rouge, design générique). */}
+      <g transform="translate(52 -78)">
+        <rect x="0" y="14" width="72" height="44" fill="#FBFBF9" stroke="#0A0A0A" strokeWidth="3" />
+        <rect x="-6" y="2" width="84" height="14" fill="#E4002B" stroke="#0A0A0A" strokeWidth="3" />
+        <rect x="30" y="34" width="14" height="24" fill="#0A0A0A" />
+        <rect x="10" y="24" width="12" height="10" fill="#9fd8ff" />
+        <rect x="52" y="24" width="12" height="10" fill="#9fd8ff" />
+      </g>
+      {/* Dresseur + petite créature originale. */}
+      <g transform="translate(14 -44)">
+        <rect x="4" y="0" width="18" height="9" fill="#E4002B" />
+        <rect x="5" y="9" width="16" height="9" fill="#f2c9a0" />
+        <rect x="8" y="12" width="3" height="3" fill="#0A0A0A" />
+        <rect x="15" y="12" width="3" height="3" fill="#0A0A0A" />
+        <rect x="3" y="18" width="20" height="12" fill="#1f4fd0" />
+        <rect x="5" y="30" width="6" height="6" fill="#0A0A0A" />
+        <rect x="15" y="30" width="6" height="6" fill="#0A0A0A" />
+      </g>
+      <Blob x={-16} y={-22} red />
+      <IslandBase w={150} />
+    </g>
   );
 }
 

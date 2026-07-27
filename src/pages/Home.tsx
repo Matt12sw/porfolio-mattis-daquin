@@ -5,6 +5,7 @@ import HeroCanvas from '../components/three/HeroCanvas';
 import PixelWorld from '../components/pixel/PixelWorld';
 import Reveal from '../components/ui/Reveal';
 import InteractiveTitle from '../components/ui/InteractiveTitle';
+import { usePortal } from '../components/ui/PortalTransition';
 import SectionHeading from '../components/ui/SectionHeading';
 import { CONTACT } from '../data/socials';
 import { SKILL_GROUPS } from '../data/skills';
@@ -13,6 +14,8 @@ import { usePrefersReducedMotion } from '../hooks/usePrefersReducedMotion';
 
 export default function Home() {
   const reduced = usePrefersReducedMotion();
+  // Transition « portail » déclenchée au clic sur le nom.
+  const portal = usePortal();
 
   return (
     <PageTransition>
@@ -44,7 +47,11 @@ export default function Home() {
               <span className="text-signal">▶</span> Player 01 — Développeur Full-Stack
             </motion.p>
 
-            <InteractiveTitle lines={[{ text: 'MATTIS' }, { text: 'DAQUIN', accent: true }]} />
+            <InteractiveTitle
+              lines={[{ text: 'MATTIS' }, { text: 'DAQUIN', accent: true }]}
+              onActivate={(e) => portal.open(e, '/about')}
+              activateLabel="Entrer dans le portfolio"
+            />
 
             <p className="mt-6 max-w-md text-lg text-smoke">
               Développeur full-stack en formation à l'EFREI Paris — je conçois des
@@ -75,7 +82,7 @@ export default function Home() {
             <p className="mt-8 font-mono text-xs text-smoke">
               {reduced
                 ? '// animations réduites'
-                : '// bougez la souris — les ballons et le décor réagissent'}
+                : '// cliquez sur le nom pour entrer — bougez la souris, tout réagit'}
             </p>
           </div>
 

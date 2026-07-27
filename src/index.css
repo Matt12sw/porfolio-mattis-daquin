@@ -111,10 +111,15 @@
 /* ------------------------------------------------------------------ */
 .sport-ball {
   position: absolute;
-  top: 50%;
+  top: 45%;
   width: 60px;
   height: 60px;
   margin-top: -30px;
   will-change: transform;
   filter: drop-shadow(0 8px 10px rgba(10, 10, 10, 0.22));
+}
+/* Le squash & stretch doit partir du bas (point d'impact au sol). */
+.sport-ball > svg {
+  transform-origin: 50% 100%;
+  will-change: transform;
 }
